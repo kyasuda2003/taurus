@@ -1,0 +1,69 @@
+{
+    "name": "aae-plugin",
+    "version": "0.2.1",
+    "description": "The Ask an Expert Desktop app browser plugin.",
+    "author": "Chia Chang <chia.chang@ge.com>",
+    "contributors": [{
+            "name": "Madhu Muppagowni",
+            "email": "Madhu.Muppagowni@ge.com"
+        },{
+            "name": "Adeet Shah",
+            "email": "Adeet.Shah@ge.com"
+        },{
+            "name": "Chia Chang",
+            "email": "chia.chang@ge.com"
+        }],
+    "bin": {
+        "aae-bower": "./cli/aae.cli.js"
+    },
+    "scripts": {
+        "test": "node ./test/unit/jasmine",
+        "start": "node ./test/mock/index",
+        "predeploy": "echo im about to deploy",
+        "postdeploy": "echo ive deployed",
+        "prepublish": "grunt",
+        "preinstall": "sudo npm i grunt-cli -g && sudo npm i bower -g && sudo npm i less -g && sudo npm i karma -g && sudo npm i mocha -g"
+
+    },
+    "config" : { "port" : "3131" },
+    "main": "./aae.main.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.sw.ge.com/AAE/aae-bower.git"
+    },
+    "bugs": {
+        "url": "https://github.sw.ge.com/AAE/aae-bower/issues",
+        "email": "aae-dev@ge.com"
+    },
+    "keywords": [
+        "aae",
+        "ask an expert",
+        "browser",
+        "plugin",
+        "bower"
+    ],
+    "dependencies": { 
+        "express": "^4.12.3",
+        "express-minify":"^0.1.3",
+        "grunt": "~0.4.5",
+        "grunt-contrib-uglify": "^0.9.1",
+        "grunt-contrib-less":"^1.0.0",
+        "body-parser":"^1.12.3",
+        "bluebird":"^2.9.24",
+        "karma-jasmine": "~0.2.0",
+        "karma-chrome-launcher": "~0.1",
+        "karma-mocha": "~0.1",
+        "karma-coverage": "~0.1",
+        "karma-html-reporter": "~0.1",
+        "karma-jquery":"^0.1.0"
+    },
+    "devDependencies": {},
+    "preferGlobal": false,
+    "private": true,
+    "publishConfig": {},
+    "subdomain": "aae-plugin",
+    "analyze": true,
+    "engines" : { "node" : "^0.10.28" },
+    "license": "BSD-3-Clause"
+}
+  
