@@ -1,6 +1,6 @@
 /*
- * nodejs web app for AAE plugin mocking
- * developer: Chia
+ * Nodejs Tau Chat server
+ * developer: 安田　圭介
  */
 
 var express=require('express'),
