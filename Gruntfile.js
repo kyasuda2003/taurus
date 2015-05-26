@@ -1,7 +1,7 @@
 /* 
  * Tau Service Grunt automation
  * 
- * Build developer: kyasuda
+ * Build developer: K. Yasuda
  */
 module.exports = function (grunt) {
     
