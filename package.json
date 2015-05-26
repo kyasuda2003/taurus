@@ -15,9 +15,8 @@
         "start": "node ./test/mock/index",
         "predeploy": "echo im about to deploy",
         "postdeploy": "echo ive deployed",
-        "prepublish": "grunt",
-        "preinstall": "sudo npm i grunt-cli -g && sudo npm i bower -g && sudo npm i karma -g && sudo npm i mocha -g"
-
+        "prepublish": "echo prepublish",
+        "preinstall": "sudo npm i grunt-cli -g && sudo npm i karma -g && sudo npm i mocha -g"
     },
     "config" : { "port" : "3131" },
     "main": "./index.js",

@@ -1,7 +1,7 @@
 /* 
- * AAE Team Grunt automation
+ * Tau Service Grunt automation
  * 
- * Build developer: Chia
+ * Build developer: kyasuda
  */
 module.exports = function (grunt) {
     
@@ -95,5 +95,5 @@ module.exports = function (grunt) {
         });
     });
     
-    grunt.registerTask('default', ['bower','uglify','compiling-bootstrap','init']);
+    grunt.registerTask('default', ['init']);
 };
