@@ -47,7 +47,6 @@
     },
     "devDependencies": {},
     "preferGlobal": false,
-    "private": true,
     "publishConfig": {},
     "subdomain": "tau-server",
     "analyze": true,
