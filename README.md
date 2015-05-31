@@ -1,58 +1,40 @@
-tau-server
+taurus
 =========
 
-Tau chatting service server
+Taurus chatting service. A Node JS chat service. Small, scalable and sturdy for your own organisational purpose.
 
 <h3>Installation:</h3>
 
 <pre>
-npm install tau
+npm install taurus
 </pre>
 
-The AAE-Plugin will be default to port#3131 and loaded automatically following the above grunt command.
-
+The Taurus is default to port#3131.
 
 <pre>
 curl http://localhost:3131/<file_name>
 </pre>
 
-Launch aae-plugin example
+Taurus client example
 <pre>
-http://localhost:3131/examples/basic.html
+https://github.com/kyasuda2003/taurus-client
 </pre>
 
-<h3>Browser Compatibility</h3>
-chromium 32.x.x.
-IE 7.Safari.Firefox 3x.x
-
-<h3>Server Usage</h3>
-Run the standalone Plugin:
--nomin: Do not minimise.
--dev: Load original files.
--apm: APM app.
--mqchat: mqchat/xmpp.
+<h3>Usage</h3>
+Adding taurus in client application:
 
 <pre>
-node ./test/mock/index [-p port# [-h host [-nomin [-dev]]]]
+var tau=required('taurus');
 </pre>
 
 
-
- 
-<h3>Client Usage</h3>
-1. Adding the following script in your html template
+2. To initial taurus - TBD
 <pre>
-&lt;script src='https://tau/tau.main.js'&gt;&lt;/script&gt;
+var option={port:3131};
+tau.init(option);
 </pre>
 
-2. To initial Ask an Expert - TBD
+3. To start taurus - TBD
 <pre>
-aaeobj.initAAE([username],
-                [invite receiving callback],
-                [done with chat service initialising callback])
-</pre>
-
-3. To start Tau - TBD
-<pre>
-tauobj.launchAAE([workspacename],[done with launchTau callback])
+tau.start();
 </pre>

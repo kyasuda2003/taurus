@@ -1,5 +1,5 @@
 {
-    "name": "tau-server",
+    "name": "taurus",
     "version": "0.1.0",
     "description": "Node JS chat service. Small, scalable and sturdy for your own organisation purpose.",
     "author": "Keisuke Yasuda <kyasuda2003@gmail.com>",
@@ -8,7 +8,7 @@
             "email": "kyasuda2003@gmail.com"
         }],
     "bin": {
-        "tau-server": "./cli/aae.cli.js"
+        "tau": "./cli/tau.cli.js"
     },
     "scripts": {
         "test": "node ./test/unit/jasmine",
@@ -31,6 +31,7 @@
     "keywords": [
         "nodejs",
         "tau",
+        "taurus",
         "chat",
         "service"
     ],
@@ -48,7 +49,7 @@
     "devDependencies": {},
     "preferGlobal": false,
     "publishConfig": {},
-    "subdomain": "tau-server",
+    "subdomain": "service",
     "analyze": true,
     "engines" : { "node" : "^0.10.28" },
     "license": "BSD-3-Clause"
