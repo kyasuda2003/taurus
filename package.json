@@ -1,7 +1,7 @@
 {
     "name": "tau-server",
     "version": "0.1.0",
-    "description": "Tau node.js chat service.",
+    "description": "Node JS chat service. Small, scalable and sturdy for your own organisation purpose.",
     "author": "Keisuke Yasuda <kyasuda2003@gmail.com>",
     "contributors": [{
             "name": "安田圭介",

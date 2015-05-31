@@ -3,17 +3,17 @@
  * developer: 安田　圭介
  */
 
-var express=require('express'),
-    helper=require('./lib/tau.helper'),
-    bodyParser = require('body-parser'),
-    path=require('path'),
-    fs=require('fs'),
-    vpath=__dirname,
-    currentPath=path.resolve('./'),
-    exp=express(),
-    route = express.Router();
-    pkg = require('./package.json'),
-    options = {
+var _express=require('express'),
+    _helper=require('./lib/tau.helper'),
+    _bodyParser = require('body-parser'),
+    _path=require('path'),
+    _fs=require('fs'),
+    _vpath=__dirname,
+    _currentPath=path.resolve('./'),
+    _exp=_express(),
+    _route = _express.Router();
+    _pkg = require('./package.json'),
+    _options = {
         dotfiles: 'ignore',
         etag: false,
         extensions: false,
@@ -22,116 +22,166 @@ var express=require('express'),
         setHeaders: function (res, path, stat) {
             res.set('x-timestamp', Date.now());
         }
-    },
-    obj={port:3131,isdev:false},_roster={},_rooms={},_responses={},_tau={
-        
-        callbacks: function(req, res, next){
-
-            //http://localhost:8080/allcallbacks?username=user2&clientid=9beb73a9-40fd-440d-ab2c-4f210e03b35c&timeoutseconds=180
-
-            var _ref=req.query.clientid,
-                _ref1=req.query.username,
-                _ref2=req.query.timeoutseconds,
-                _ref3=_promises[_ref];
-
-            if (typeof _ref3=='undefined'){
-                res.writeHead(501, "No mapping", {'Content-Type': 'application/json'});
-                return res.end(JSON.stringify({status:'No mapping'}));
+    },      
+    _obj={port:3131,isdev:false},
+    _status={online:1,offline:2,away:3,left:4,joined:5},
+    _roster={},_rooms={},_res={},
+    _removeUserInRooms=function(userId){
+         for (key in _rooms){
+            if (_rooms.hasOwnProperty(key)){
+                var pos=_rooms[key].users.indexOf(userId);
+                if (pos>-1)
+                    _rooms[key].users.splice(pos,1);
             }
+         }
+    },
+    _msgproc=function(senderId,msgtype,msgval){
 
-            _ref3.prms.then(function(val){
-                _ref3.prms=new promise(function(resolve,reject){
-                    _ref3.resolve=resolve;
-                    _ref3.reject=reject;
-                });
-
-                res.writeHead(200, { "Content-Type": "application/json" });
-                return res.end(JSON.stringify(val));
+        for (var key in _res) {
+            if (_res.hasOwnProperty(key)) {
+                var pr=_res[key];
+                if (key!=senderId){
+                    pr.end({callbackType:msgtype,callbackInfo:msgval});
+                }
+            }
+        }
+    },  
+    _api={
+        callbacks: function(req, res, next){
+            /*
+             * request body
+             * {userId:<userId>,timeout:<timeout>}
+             * response
+             * {callbackType:<msgtype>,callbackInfo:<msgval>}
+             */
+            
+            var userId=req.body.userId,
+                timeout=req.body.timeout;
+    
+            timeout&&(timeout==60000);  
+            res.setTimeout(timeout, function(){
+                return res.end(JSON.stringify({callbackType:'AppStatus',
+                                        callbackInfo:{status:'Connection expired in millisec:'+timeout}}));
             });
+            
+            _res[userId]=res;
+            
         },
         login: function(req,res, next){
+            /*
+             * request body
+             * {userName:<username>}
+             * response
+             * {status:<status>,userId:<userId>,user:{userName:<username>,status:<enum>}}
+             */
+            var userId=_helper.getUUID(),body=req.body,
+                rosterObj={};
+        
+            _roster[userId]={userName:body.userName,status:_status.online};
+            
+            rosterObj=_helper.objCopy(_roster[userId]);
+            rosterObj.status=_status.online;
+            _msgproc(userId,'presenceStatus',rosterObj);
 
-            var _ref=helper.getUUID(),_ref1=req.body,
-                _ref2=_roster[_ref]={UserName:_ref1.userName,ClientId:_ref,PresenceStatus:'Available'},
-                _ref3=_promises[_ref]={cid:_ref};
-
-                _ref3.prms=new promise(function(resolve,reject){
-                    _ref3.resolve=resolve;
-                    _ref3.reject=reject;
-                });
-
-            app._msgproc('PresenceStatus',_ref2);
-
-            return res.end(JSON.stringify(_ref2));
+            return res.end(JSON.stringify({status:'User '+rosterObj.userName+' has logged-in tau.',userId:userId,user:rosterObj}));
 
         },
         logout: function(req,res, next){
+            /*
+             * request body
+             * {userId:<userId>}
+             * response
+             * {status:<status>,user:{userName:<username>,status:<enum>}}
+             */
 
-            //{"userName":"user1","clientId":"1dc0afa2-9fb7-43b5-880d-b94d2a6dda67"}
-            var _ref=req.body.ClientId;
+            var userId=req.body.userId,rosterObj=_helper.objCopy(_roster[userId]);
 
-            delete _roster[_ref];
-            delete _promises[_ref];
+            delete _res[userId];
 
-
-            delete _rooms[_ref];
-        },
-        createroom:function(req,res,next){
-            if (!app._validate(req))
-                return res.end(JSON.stringify({status:'auth fail.'}));
-
-            //{"userName":"user1","clientId":"0b6648b8-9a81-4e85-bc77-1c8e8b1f3f87","roomName":"room1"}
+            delete _roster[userId];
+            
+            _removeUserInRooms(userId);
+            
+            rosterObj.status=_status.offline;
+            
+            _msgproc(userId,'presenceStatus',rosterObj);
+            
+            return res.end(JSON.stringify({status:'User '+rosterObj.userName+' has logged-out tau.',
+                                           user:rosterObj}));
 
         },
         joinroom:function(req,res,next){
+            /*
+             * request body
+             * {userId:<userId>,roomId:<roomId>,roomName:<roomName>}
+             * response
+             * {status:<status>,room:{roomId:<roomId>,roomName:<roomName>,users:<[userId]>}}
+             */
 
-            //{"userName":"user2","clientId":"fd76786f-c926-4d10-b5ab-dcf6c56deb2d","roomName":"room1","createRoomIfNotExist":false}
+            var body=req.body,userId=body.userId,
+                roomId=body.roomId,roomName=body.roomName,
+                roomObj={},rosterObj={};
 
-            var roomName=req.body.roomName,
-                cId=req.body.clientId,
-                createRoomNotExist=req.body.createRoomIfNotExist;
-
-            if (createRoomNotExist){
-                if (typeof _rooms[roomName]=='undefined')
-                    _rooms[roomName]={users:[]};
+            if (typeof roomId=='undefined'){
+                roomId=_helper.getUUID();
             }
-
-            if (_rooms[roomName]&&_rooms[roomName].users.indexOf(cId)<0){
-                _rooms[roomName].users.splice(0,0,cId);
-                return res.end(JSON.stringify({status:'User joined the room:'+roomName}));
+            else {
+                if (typeof _rooms[roomId]=='undefined'){
+                    res.writeHead(501, "No mapping", {'Content-Type': 'application/json'});
+                    return res.end(JSON.stringify({status:'Room invalid.'}));
+                }
+            }
+            
+            roomObj=_rooms[roomId];
+            
+            if (typeof roomObj=='undefined'){
+                roomObj=(_rooms[roomId]=
+                            {roomId:roomId,roomName:roomName,users:[]});
+            }
+            
+            if (roomObj.users.indexOf(userId)<0){
+                _roster[userId].status=_status.online;
+                roomObj.users.splice(0,0,userId);
+                rosterObj=_helper.objCopy(_roster[userId]);
+                rosterObj.status=_status.joined;
+                _msgproc(userId,'presenceStatus',rosterObj);
+            
+                return res.end(JSON.stringify({status:'User joined the room:'+roomName,
+                                               room:roomObj}));
             }
 
             return res.end(JSON.stringify({status:'User failed joining the room:'+roomName}));
-
-
         },
         leaveroom:function(req,res,next){
 
             //{"userName":"user2","clientId":"9048d8a3-b7db-4c5a-9a07-15e0c1439ecb","roomName":"room1"}
-            var roomName=req.body.roomName,
-                cId=req.body.clientId,
-                pos=_rooms[roomName].users.indexOf(cId);
+            /*
+             * request body
+             * {userId:<userId>,roomId:<roomId>}
+             * response
+             * {status:<status>}
+             */
+            
+            var body=req.body,
+                userId=body.userId,
+                roomId=body.roomId,
+                rosterObj={},
+                pos=_rooms[roomId].users.indexOf(userId);
 
             if (pos>-1){
-                _rooms[roomName].users.splice(pos,1);
-                return res.end(JSON.stringify({status:'User left the room:'+roomName}));
+                _roster[userId].status=_status.online;
+                _rooms[roomId].users.splice(pos,1);
+                rosterObj=_helper.objCopy(_roster[userId]);
+                rosterObj.status=_status.left;
+                _msgproc(userId,'presenceStatus',rosterObj);
+            
+                return res.end(JSON.stringify({status:'User left the room:'+_rooms[roomId].roomName}));
             }
 
-            return res.end(JSON.stringify({status:'Room error.'}));
+            return res.end(JSON.stringify({status:'Room invalid.'}));
 
         },
-        _msgproc: function(msgtype,msgval){
-
-            for (var key in _promises) {
-                if (_promises.hasOwnProperty(key)) {
-                    var pr=_promises[key];
-                    if (key!=msgval.ClientId)
-                        pr.resolve({callbackType:msgtype,callbackInfo:msgval});
-                }
-            }
-
-        },
-        _validate:function(req,res,next){
+        validate:function(req,res,next){
             var _ref=req.body.userName,
                 _ref1=req.body.ClientId,
                 _ref2=true;
@@ -148,24 +198,16 @@ var express=require('express'),
             return next();
         }
     },module.exports={,
-        init:function(){
+        init:function(conf){
+            obj.port=conf.port;
+            obj.isdev=conf.isdev;
             
         },
         start:function(){
-            console.log('currentPath:'+currentPath);
-            console.log('__dirname:'+__dirname);
-
-            if (process.argv.indexOf('-dev')>-1){
-                obj.isdev=true;
-            }
             
-            if (process.argv.indexOf('-port')>-1){
-                obj.port=process.argv[process.argv.indexOf('-port')+1];
-            }
-            
-            route.post('/login',_tau.login);
-            route.get('/allcallbacks',_tau._validate,_tau.callbacks);
-            route.post('/leavechatroom',_tau._validate,_tau.leaveroom);
+            route.post('/login',_api.login);
+            route.get('/allcallbacks',_api._validate,_api.callbacks);
+            route.post('/leavechatroom',_api._validate,_api.leaveroom);
 
             exp.use(bodyParser.json(),
                     bodyParser.urlencoded({ extended: true }),

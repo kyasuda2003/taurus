@@ -6,7 +6,7 @@ Tau chatting service server
 <h3>Installation:</h3>
 
 <pre>
-npm install tau-client
+npm install tau
 </pre>
 
 The AAE-Plugin will be default to port#3131 and loaded automatically following the above grunt command.
