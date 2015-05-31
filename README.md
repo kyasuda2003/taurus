@@ -16,9 +16,9 @@ curl http://localhost:3131/<file_name>
 </pre>
 
 Taurus client example
-<pre>
+<a href="https://github.com/kyasuda2003/taurus-client">
 https://github.com/kyasuda2003/taurus-client
-</pre>
+</a>
 
 <h3>Usage</h3>
 Adding taurus in client application:
