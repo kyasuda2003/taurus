@@ -1,6 +1,6 @@
 {
     "name": "taurus",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Node JS chat service. Small, scalable and sturdy for your own organisation purpose.",
     "author": "Keisuke Yasuda <kyasuda2003@gmail.com>",
     "contributors": [{
@@ -22,7 +22,7 @@
     "main": "./index.js",
     "repository": {
         "type": "git",
-        "url": "https://github.com/kyasuda2003/tau.git"
+        "url": "https://github.com/kyasuda2003/taurus.git"
     },
     "bugs": {
         "url": "https://github.com/kyasuda2003/tau/issues",
