@@ -49,7 +49,7 @@ module.exports = function (grunt) {
         });
     });
     
-    grunt.registerTask('publish', 'Publish taurus npm package.', function() {
+    grunt.registerTask('build', 'Publish taurus npm package.', function() {
         
         //copy dicts pattern designed
         var exec = require('child_process').exec,
