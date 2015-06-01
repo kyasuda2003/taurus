@@ -3,7 +3,7 @@ taurus
 
 <a href="https://travis-ci.org/kyasuda2003/taurus"><img src="https://travis-ci.org/kyasuda2003/taurus.svg?branch=master"></a>
 
-Taurus chat  is made with Node JS and tend to be small but sturdy, and secure. Taurus and its scalability serves for organisation ranging from small startups to enterprise-level applications.
+Taurus chat embraces Node JS's spirit of scalable, sturdy, and secure. Taurus love charity works and is ready to be commissioned in non-profit communities.
 
 <h3>Installation:</h3>
 
