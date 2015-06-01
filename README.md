@@ -3,7 +3,9 @@ taurus
 
 <a href="https://travis-ci.org/kyasuda2003/taurus"><img src="https://travis-ci.org/kyasuda2003/taurus.svg?branch=master"></a>
 
-taurus chat embraces Node JS's spirit of scalablity, sturdiness, and security. taurus realises how imperative of #<b>long-poll</b> http request is when websocket is a no-go in a complex production environment.
+taurus chat embraces Node JS's spirit of scalablity, sturdiness, and security. taurus realises how imperative of #<b>long-poll</b> http request is when #<b>websocket</b> is a no-go in a complex production environment.
+
+taurus supports both #<b>Long-poll</b> #<b>Websocket</b> connection.
 
 taurus loves charity works and is ready to be commissioned in non-profit communities.
 
