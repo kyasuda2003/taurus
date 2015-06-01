@@ -38,10 +38,10 @@
 <h3>
 <a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation:</h3>
 
-<p>Taurus requires the installation via a root/administaor account.</p>
+<p>Taurus recommend to install package through --save-dev.</p>
 
 <pre>
-npm install taurus
+npm install taurus --save-dev
 </pre>
 
 <p>Taurus is default to port#3131.</p>
@@ -66,33 +66,26 @@ curl http://localhost:3131/
 var tau=required('taurus');
 </pre>
 
-<ol>
-<li>
-<p>To initial taurus - TBD</p>
+<p>1) To initial taurus - TBD.</p>
 
 <pre>
 var option={port:3131};
 tau.init(option);
 </pre>
-</li>
-<li>
-<p>To start taurus - TBD</p>
+
+<p>2) To start taurus - TBD.</p>
 
 <pre>
 tau.start();
 </pre>
-</li>
-<li><p>To run Taurus through Grunt you would need a <a href="http://gruntjs.com/getting-started">grunt install</a></p></li>
-</ol>
+
+<p>3) To run Taurus through Grunt you would need a <a href="http://gruntjs.com/getting-started">grunt install</a>.</p>
 
 <pre>
-$grunt start
+$grunt start (start-dev for dev env)
 </pre>
 
-<ol>
-<li>Before to run Taurus unit test, you also need <a href="https://www.npmjs.com/package/istanbul">to install istanbul</a> and <a href="http://mochajs.org/"> to install mocha</a>
-</li>
-</ol>
+<p>4) Before running Taurus unit test, you also need <a href="https://www.npmjs.com/package/istanbul">to install istanbul</a> and <a href="http://mochajs.org/"> to install mocha</a>.</p>
 
 <pre>
 $grunt test
