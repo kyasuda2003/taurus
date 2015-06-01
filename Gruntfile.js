@@ -26,12 +26,12 @@ module.exports = function (grunt) {
         
     });
     
-    grunt.registerTask('test', 'Start the AAE Plugin', function() {
+    grunt.registerTask('test', 'Start the Taurus unit test.', function() {
         
         var exec = require('child_process').exec,
             ncb = this.async();
         
-        var _ref=exec('node ./server/index -nomin -dev -mqchat -apm -p 7171 -h http://localhost', {}, function(err, stdout, stderr) {
+        var _ref=exec('mocha', {}, function(err, stdout, stderr) {
             console.log('\nStart the AAE Plugin');
         });
         
@@ -44,7 +44,7 @@ module.exports = function (grunt) {
         });
         
         _ref.on('close', function (code) {
-            console.log('AAE-Plugin exited with code ' + code);
+            console.log('Taurus exited with code: ' + code);
             ncb();
         });
     });
