@@ -38,6 +38,8 @@
 <h3>
 <a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation:</h3>
 
+<p>Taurus requires the installation via a root/administaor account.</p>
+
 <pre>
 npm install taurus
 </pre>
@@ -48,8 +50,7 @@ npm install taurus
 curl http://localhost:3131/
 </pre>
 
-<p>Taurus Project Page:
-<a href="http://kyasuda2003.github.io/taurus/">http://kyasuda2003.github.io/taurus/</a></p>
+<p><a href="http://kyasuda2003.github.io/taurus/">Taurus Project Page</a></p>
 
 <p>Taurus client example
 <a href="https://github.com/kyasuda2003/taurus-client">
@@ -81,7 +82,21 @@ tau.init(option);
 tau.start();
 </pre>
 </li>
+<li><p>To run Taurus through Grunt you would need a <a href="http://gruntjs.com/getting-started">grunt install</a></p></li>
 </ol>
+
+<pre>
+$grunt start
+</pre>
+
+<ol>
+<li>Before to run Taurus unit test, you also need <a href="https://www.npmjs.com/package/istanbul">to install istanbul</a> and <a href="http://mochajs.org/"> to install mocha</a>
+</li>
+</ol>
+
+<pre>
+$grunt test
+</pre>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/kyasuda2003">kyasuda2003</a></p>
