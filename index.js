@@ -1,5 +1,5 @@
 /*
- * Nodejs Taurus Chat service
+ * Taurus Nodejs Chat service
  * developer: K. Yasuda /安田圭介
  */
 
