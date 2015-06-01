@@ -8,7 +8,7 @@
             "email": "kyasuda2003@gmail.com"
         }],
     "bin": {
-        "tau": "./cli/tau.cli.js"
+        "tau": "./cli/taurus"
     },
     "scripts": {
         "test": "grunt test",
@@ -16,7 +16,7 @@
         "predeploy": "echo im about to deploy",
         "postdeploy": "echo ive deployed",
         "prepublish": "echo prepublish",
-        "preinstall": "npm i grunt-cli -g"
+        "preinstall": "npm install grunt-cli"
     },
     "config" : { "port" : "3131" },
     "main": "./index.js",
@@ -39,7 +39,6 @@
     ],
     "dependencies": { 
         "express": "^4.12.3",
-        "grunt": "~0.4.5",
         "body-parser":"^1.12.3",
         "istanbul":"^0.3.14",
         "mocha":"2.2.5"

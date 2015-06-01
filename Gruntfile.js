@@ -11,25 +11,10 @@ module.exports = function (grunt) {
     
     grunt.registerTask('start', 'Start the Taurus', function() {
         
-        var exec = require('child_process').exec,
-            ncb = this.async();
-        
-        var _ref=exec('./cli/tau.cli.js', {}, function(err, stdout, stderr) {
-            console.log('\nTaurus has started');
-        });
-        
-        _ref.stdout.on('data', function (data) {
-            console.log(data);
-        });
-        
-        _ref.stderr.on('data', function (data) {
-            console.log(data);
-        });
-        
-        _ref.on('close', function (code) {
-            console.log('Taurus exited with code ' + code);
-            ncb();
-        });
+        var _chat=require('index');
+
+        _chat.init();
+        _chat.start();
     });
     
     grunt.registerTask('test', 'Start the AAE Plugin', function() {
