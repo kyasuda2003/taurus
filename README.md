@@ -7,9 +7,9 @@ Taurus chatting service. A Node JS chat service. Small, scalable and sturdy for 
 
 <h3>Installation:</h3>
 
-Taurus requires the installation via a root/administaor account.
+Taurus recommend to install package through --save-dev.
 <pre>
-npm install taurus
+npm install taurus --save-dev
 </pre>
 
 Taurus is default to port#3131.
