@@ -9,6 +9,12 @@ taurus supports both #<b>Long-poll</b> #<b>Websocket</b> connection.
 
 taurus loves charity works and is ready to be commissioned in non-profit communities.
 
+<pre>
+curl http://localhost:3131/<file_name>
+</pre>
+
+<a href="http://kyasuda2003.github.io/taurus/">taurus Project Page</a>
+
 <h3>Installation:</h3>
 
 taurus recommend to install package through --save-dev.
@@ -17,17 +23,6 @@ npm install taurus --save-dev
 </pre>
 
 taurus is default to port#3131.
-
-<pre>
-curl http://localhost:3131/<file_name>
-</pre>
-
-<a href="http://kyasuda2003.github.io/taurus/">taurus Project Page</a>
-
-taurus client example
-<a href="https://github.com/kyasuda2003/taurus-client">
-https://github.com/kyasuda2003/taurus-client
-</a>
 
 <h3>Usage</h3>
 Adding taurus in client application:
@@ -56,4 +51,11 @@ $grunt start (start-dev for dev env)
 <pre>
 $grunt test
 </pre>
+
+<h3>Example</h3>
+taurus-client:
+<a href="https://github.com/kyasuda2003/taurus-client">
+https://github.com/kyasuda2003/taurus-client
+</a>
+
 
