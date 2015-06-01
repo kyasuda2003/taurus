@@ -11,7 +11,7 @@ module.exports = function (grunt) {
     
     grunt.registerTask('start', 'Start the Taurus', function() {
         
-        var _chat=require('index');
+        var _chat=require('./index');
 
         _chat.init();
         _chat.start();

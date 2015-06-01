@@ -205,7 +205,7 @@ var _express=require('express'),
             
             return next();
         }
-    },module.exports={,
+    },module.exports={
         init:function(conf){
             obj.port=conf.port;
             obj.isdev=conf.isdev;

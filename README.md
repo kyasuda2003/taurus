@@ -50,7 +50,7 @@ tau.start();
 $grunt start
 </pre>
 
-5. Before to run Taurus unit test, you also need <a href="https://www.npmjs.com/package/istanbul">to install istanbul</a> and <a href="http://mochajs.org/"> to install mocha</a>
+5. Before running Taurus unit test, you also need <a href="https://www.npmjs.com/package/istanbul">to install istanbul</a> and <a href="http://mochajs.org/"> to install mocha</a>
 
 <pre>
 $grunt test
