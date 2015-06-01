@@ -1,0 +1,59 @@
+{
+  "name": "taurus",
+  "version": "0.1.7",
+  "description": "A Long-poll based chat service.",
+  "author": "Keisuke Yasuda <kyasuda2003@gmail.com>",
+  "contributors": [
+    {
+      "name": "安田圭介",
+      "email": "kyasuda2003@gmail.com"
+    }
+  ],
+  "bin": {
+    "tau": "./cli/taurus"
+  },
+  "scripts": {
+    "test": "grunt test",
+    "start": "grunt start",
+    "predeploy": "echo im about to deploy",
+    "postdeploy": "echo ive deployed",
+    "prepublish": "echo prepublish",
+    "preinstall": ""
+  },
+  "config": {
+    "port": "3131"
+  },
+  "main": "./index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kyasuda2003/taurus.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kyasuda2003/taurus/issues",
+    "email": "kyasuda2003@gmail.com"
+  },
+  "keywords": [
+    "nodejs",
+    "tau",
+    "taurus",
+    "chat",
+    "collaboration",
+    "node",
+    "service"
+  ],
+  "dependencies": {
+    "express": "^4.12.3",
+    "body-parser": "^1.12.3"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5"
+  },
+  "preferGlobal": false,
+  "publishConfig": {},
+  "subdomain": "service",
+  "analyze": true,
+  "engines": {
+    "node": "^0.10.28"
+  },
+  "license": "BSD-3-Clause"
+}
