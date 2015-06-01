@@ -16,7 +16,7 @@
         "predeploy": "echo im about to deploy",
         "postdeploy": "echo ive deployed",
         "prepublish": "echo prepublish",
-        "preinstall": "sudo npm i -g grunt-cli"
+        "preinstall": ""
     },
     "config" : { "port" : "3131" },
     "main": "./index.js",
@@ -41,7 +41,7 @@
         "express": "^4.12.3",
         "body-parser":"^1.12.3",
         "istanbul":"^0.3.14",
-        "mocha":"2.2.5"
+        "mocha":"^2.2.5"
     },
     "devDependencies": {},
     "preferGlobal": false,
