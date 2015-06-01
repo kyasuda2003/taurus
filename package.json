@@ -1,7 +1,7 @@
 {
   "name": "taurus",
-  "version": "0.1.6",
-  "description": "A Node JS chat service.",
+  "version": "0.1.7",
+  "description": "A Long-poll based chat service.",
   "author": "Keisuke Yasuda <kyasuda2003@gmail.com>",
   "contributors": [
     {
