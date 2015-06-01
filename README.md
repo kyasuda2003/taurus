@@ -1,7 +1,7 @@
 taurus
 =========
 
-https://travis-ci.org/kyasuda2003/taurus.svg?branch=master
+<img src="https://travis-ci.org/kyasuda2003/taurus.svg?branch=master" />
 
 Taurus chatting service. A Node JS chat service. Small, scalable and sturdy for your own organisational purpose.
 
