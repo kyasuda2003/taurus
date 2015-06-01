@@ -16,7 +16,7 @@
         "predeploy": "echo im about to deploy",
         "postdeploy": "echo ive deployed",
         "prepublish": "echo prepublish",
-        "preinstall": "npm install grunt-cli"
+        "preinstall": "npm i grunt-cli -g"
     },
     "config" : { "port" : "3131" },
     "main": "./index.js",
