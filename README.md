@@ -3,7 +3,7 @@ taurus
 
 <a href="https://travis-ci.org/kyasuda2003/taurus"><img src="https://travis-ci.org/kyasuda2003/taurus.svg?branch=master"></a>
 
-Taurus chatting service. A Node JS chat service. Small, scalable and sturdy for your own organisational purpose.
+Taurus chat  is made with Node JS and tend to be small but sturdy, and secure. Taurus and its scalability serves for organisation ranging from small startups to enterprise-level applications.
 
 <h3>Installation:</h3>
 
