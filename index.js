@@ -50,7 +50,7 @@ var _express=require('express'),
         callbacks: function(req, res, next){
             /*
              * request body
-             * {userId:<userId>,timeout:<timeout>}
+             * {userId:<userId>,userName:<userName>,timeout:<timeout>}
              * response
              * {callbackType:<msgtype>,callbackInfo:<msgval>}
              */
@@ -89,7 +89,7 @@ var _express=require('express'),
         logout: function(req,res, next){
             /*
              * request body
-             * {userId:<userId>}
+             * {userId:<userId>,userName:<userName>}
              * response
              * {status:<status>,user:{userName:<username>,status:<enum>}}
              */
@@ -113,7 +113,7 @@ var _express=require('express'),
         joinroom:function(req,res,next){
             /*
              * request body
-             * {userId:<userId>,roomId:<roomId>,roomName:<roomName>}
+             * {userId:<userId>,userName:<userName>,roomId:<roomId>,roomName:<roomName>}
              * response
              * {status:<status>,room:{roomId:<roomId>,roomName:<roomName>,users:<[userId]>}}
              */
@@ -154,10 +154,9 @@ var _express=require('express'),
         },
         leaveroom:function(req,res,next){
 
-            //{"userName":"user2","clientId":"9048d8a3-b7db-4c5a-9a07-15e0c1439ecb","roomName":"room1"}
             /*
              * request body
-             * {userId:<userId>,roomId:<roomId>}
+             * {userId:<userId>,userName:<userName>,roomId:<roomId>}
              * response
              * {status:<status>}
              */
@@ -182,19 +181,28 @@ var _express=require('express'),
 
         },
         validate:function(req,res,next){
-            var _ref=req.body.userName,
-                _ref1=req.body.ClientId,
-                _ref2=true;
+            
+            /*
+             * request body
+             * {userId:<userId>,userName:<userName>}
+             * fail response
+             * {status:<status>}
+             */
+            
+            var userId=req.body.userId,
+                userName=req.body.userName,
+                _ref=true;
 
-            console.log(_roster[_ref1]+', cid:'+_ref1);
-            if ((typeof _roster[_ref1]=='undefined')||(_roster[_ref1]&&_roster[_ref1].UserName!=_ref))
-                _ref2=false;
+            //console.log(_roster[_ref1]+', cid:'+_ref1);
+            
+            if ((typeof _roster[userId]=='undefined')||(_roster[userId]&&_roster[userId].UserName!=userName))
+                _ref=false;
 
-            if (_ref2==false){
+            if (_ref==false){
                 res.writeHead(401, { "Content-Type": "application/json" });
                 return res.end(JSON.stringify({status:'auth fail.'}));
             }
-
+            
             return next();
         }
     },module.exports={,
@@ -206,8 +214,8 @@ var _express=require('express'),
         start:function(){
             
             route.post('/login',_api.login);
-            route.get('/allcallbacks',_api._validate,_api.callbacks);
-            route.post('/leavechatroom',_api._validate,_api.leaveroom);
+            route.get('/allcallbacks',_api.validate,_api.callbacks);
+            route.post('/leavechatroom',_api.validate,_api.leaveroom);
 
             exp.use(bodyParser.json(),
                     bodyParser.urlencoded({ extended: true }),

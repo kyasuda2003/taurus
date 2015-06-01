@@ -11,12 +11,12 @@
         "tau": "./cli/tau.cli.js"
     },
     "scripts": {
-        "test": "node ./test/unit/jasmine",
-        "start": "node ./test/mock/index",
+        "test": "grunt test",
+        "start": "grunt start",
         "predeploy": "echo im about to deploy",
         "postdeploy": "echo ive deployed",
         "prepublish": "echo prepublish",
-        "preinstall": "sudo npm i grunt-cli -g && sudo npm i karma -g && sudo npm i mocha -g"
+        "preinstall": "npm i grunt-cli -g"
     },
     "config" : { "port" : "3131" },
     "main": "./index.js",
@@ -25,7 +25,7 @@
         "url": "https://github.com/kyasuda2003/taurus.git"
     },
     "bugs": {
-        "url": "https://github.com/kyasuda2003/tau/issues",
+        "url": "https://github.com/kyasuda2003/taurus/issues",
         "email": "kyasuda2003@gmail.com"
     },
     "keywords": [
@@ -39,12 +39,8 @@
         "express": "^4.12.3",
         "grunt": "~0.4.5",
         "body-parser":"^1.12.3",
-        "karma-jasmine": "~0.2.0",
-        "karma-chrome-launcher": "~0.1",
-        "karma-mocha": "~0.1",
-        "karma-coverage": "~0.1",
-        "karma-html-reporter": "~0.1",
-        "karma-jquery":"^0.1.0"
+        "istanbul":"^0.3.14",
+        "mocha":"2.2.5"
     },
     "devDependencies": {},
     "preferGlobal": false,
