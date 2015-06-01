@@ -33,24 +33,24 @@ var tau=required('taurus');
 </pre>
 
 
-2. To initial taurus - TBD
+1. To initial taurus - TBD
 <pre>
 var option={port:3131};
 tau.init(option);
 </pre>
 
-3. To start taurus - TBD
+2. To start taurus - TBD
 <pre>
 tau.start();
 </pre>
 
-4. To run Taurus through Grunt you would need a <a href="http://gruntjs.com/getting-started">grunt install</a>
+3. To run Taurus through Grunt you would need a <a href="http://gruntjs.com/getting-started">grunt install</a>
 
 <pre>
 $grunt start
 </pre>
 
-5. Before running Taurus unit test, you also need <a href="https://www.npmjs.com/package/istanbul">to install istanbul</a> and <a href="http://mochajs.org/"> to install mocha</a>
+4. Before running Taurus unit test, you also need <a href="https://www.npmjs.com/package/istanbul">to install istanbul</a> and <a href="http://mochajs.org/"> to install mocha</a>
 
 <pre>
 $grunt test
