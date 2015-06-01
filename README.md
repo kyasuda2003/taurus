@@ -3,7 +3,7 @@ taurus
 
 <a href="https://travis-ci.org/kyasuda2003/taurus"><img src="https://travis-ci.org/kyasuda2003/taurus.svg?branch=master"></a>
 
-Taurus chat embraces Node JS's spirit of scalable, sturdy, and secure. Taurus loves charity works and is ready to be commissioned in non-profit communities.
+Taurus chat embraces Node JS's spirit of scalable, sturdy, and secure. Taurus loves charity works and is ready to be commissioned in any non-profit communities.
 
 <h3>Installation:</h3>
 
