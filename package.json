@@ -33,6 +33,8 @@
         "tau",
         "taurus",
         "chat",
+        "collaboration",
+        "node",
         "service"
     ],
     "dependencies": { 

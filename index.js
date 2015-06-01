@@ -1,6 +1,6 @@
 /*
- * Nodejs Tau Chat server
- * developer: 安田　圭介
+ * Nodejs Taurus Chat service
+ * developer: K. Yasuda /安田圭介
  */
 
 var _express=require('express'),
