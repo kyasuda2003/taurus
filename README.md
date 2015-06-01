@@ -7,9 +7,9 @@ Taurus chatting service. A Node JS chat service. Small, scalable and sturdy for 
 
 <h3>Installation:</h3>
 
-Taurus requires the installation via root/administaor account.
+Taurus requires the installation via a root/administaor account.
 <pre>
-sudo npm install taurus
+npm install taurus
 </pre>
 
 Taurus is default to port#3131.
@@ -18,8 +18,7 @@ Taurus is default to port#3131.
 curl http://localhost:3131/<file_name>
 </pre>
 
-Taurus Project Page:
-http://kyasuda2003.github.io/taurus/
+<a href="http://kyasuda2003.github.io/taurus/">Taurus Project Page</a>
 
 Taurus client example
 <a href="https://github.com/kyasuda2003/taurus-client">
@@ -44,3 +43,16 @@ tau.init(option);
 <pre>
 tau.start();
 </pre>
+
+4. To run Taurus through Grunt you would need a <a href="http://gruntjs.com/getting-started">grunt install</a>
+
+<pre>
+$grunt start
+</pre>
+
+5. Before to run Taurus unit test, you also need <a href="https://www.npmjs.com/package/istanbul">to install istanbul</a> and <a href="http://mochajs.org/"> to install mocha</a>
+
+<pre>
+$grunt test
+</pre>
+
