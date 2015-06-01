@@ -1,6 +1,6 @@
 {
   "name": "taurus",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "A Long-poll based chat service.",
   "author": "Keisuke Yasuda <kyasuda2003@gmail.com>",
   "contributors": [
