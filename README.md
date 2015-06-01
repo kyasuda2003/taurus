@@ -7,7 +7,7 @@ taurus chat embraces Node JS's spirit of scalablity, sturdiness, and security. t
 
 taurus supports both #<b>Long-poll</b> #<b>Websocket</b> connection.
 
-taurus loves charity works and is ready to be commissioned in non-profit communities.
+taurus loves charity works and is ready to be commissioned in any non-profit communities.
 
 <pre>
 curl http://localhost:3131/<file_name>
