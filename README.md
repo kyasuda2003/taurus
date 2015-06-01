@@ -15,6 +15,9 @@ Taurus is default to port#3131.
 curl http://localhost:3131/<file_name>
 </pre>
 
+Taurus Project Page:
+http://kyasuda2003.github.io/taurus/
+
 Taurus client example
 <a href="https://github.com/kyasuda2003/taurus-client">
 https://github.com/kyasuda2003/taurus-client
