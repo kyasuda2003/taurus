@@ -1,6 +1,6 @@
 {
   "name": "taurus",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Node JS chat service. Small, scalable and sturdy for your own organisation purpose.",
   "author": "Keisuke Yasuda <kyasuda2003@gmail.com>",
   "contributors": [

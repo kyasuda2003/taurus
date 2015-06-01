@@ -12,17 +12,7 @@ var _express=require('express'),
     _currentPath=_path.resolve('./'),
     _exp=_express(),
     _route = _express.Router();
-    _pkg = require('./package.json'),
-    _options = {
-        dotfiles: 'ignore',
-        etag: false,
-        extensions: false,
-        maxAge: '1d',
-        redirect: false,
-        setHeaders: function (res, path, stat) {
-            res.set('x-timestamp', Date.now());
-        }
-    },      
+    _pkg = require('./package.json'),     
     _obj={port:3131,isdev:false},
     _status={online:1,offline:2,away:3,left:4,joined:5},
     _roster={},_rooms={},_res={},
@@ -67,7 +57,7 @@ var _express=require('express'),
             _res[userId]=res;
             
         },
-        login: function(req,res, next){
+        connect: function(req,res, next){
             /*
              * request body
              * {userName:<username>}
@@ -86,7 +76,7 @@ var _express=require('express'),
             return res.end(JSON.stringify({status:'User '+rosterObj.userName+' has logged-in tau.',userId:userId,user:rosterObj}));
 
         },
-        logout: function(req,res, next){
+        disconnect: function(req,res, next){
             /*
              * request body
              * {userId:<userId>,userName:<userName>}
@@ -213,21 +203,37 @@ var _express=require('express'),
         },
         start:function(){
             
-            route.post('/login',_api.login);
-            route.get('/allcallbacks',_api.validate,_api.callbacks);
-            route.post('/leavechatroom',_api.validate,_api.leaveroom);
+            _route.post('/connect',_api.connect);
+            _route.post('/disconnect',_api.validate,_api.disconnect);
+            _route.post('/callbacks',_api.validate,_api.callbacks);
+            _route.post('/joinroom',_api.validate,_api.joinroom);
+            _route.post('/leaveroom',_api.validate,_api.leaveroom);
 
-            exp.use(bodyParser.json(),
-                    bodyParser.urlencoded({ extended: true }),
-                    route,express.static(currentPath,options));
+            _exp.use(_bodyParser.json(),
+                     _bodyParser.urlencoded({ extended: true }),
+                     _route);
 
-            exp.listen(obj.port);
+            _exp.listen(_obj.port);
             
-            console.log('\ntau is running on port# ' + obj.port.toString());
+            console.log('\ntaurus is running on port# ' + _obj.port.toString());
+            
+            process.on('exit', function(code) {
+                console.log('\nTaurus exit with code:'+ code);
+            });
 
+            process.on('uncaughtException', function(err) {
+                console.log('\nTaurus was caught with exception: ' + err);
+            });
+            
+            process.on('SIGINT', function() {
+                //socket.close();
+                process.exit(-151);
+            });
         },
         shutdown:function(){}
     };
+    
+    
 
 
     

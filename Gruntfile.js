@@ -19,10 +19,11 @@ module.exports = function (grunt) {
     
     grunt.registerTask('start', 'Start the Taurus', function() {
         
-        var _tau=require('./index');
+        var _tau=require('./index'),ncb=this.async();
 
         _tau.init({port:3131,isdev:false});
         _tau.start();
+        
     });
     
     grunt.registerTask('test', 'Start the AAE Plugin', function() {
