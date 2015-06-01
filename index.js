@@ -9,7 +9,7 @@ var _express=require('express'),
     _path=require('path'),
     _fs=require('fs'),
     _vpath=__dirname,
-    _currentPath=path.resolve('./'),
+    _currentPath=_path.resolve('./'),
     _exp=_express(),
     _route = _express.Router();
     _pkg = require('./package.json'),
@@ -207,8 +207,8 @@ var _express=require('express'),
         }
     },module.exports={
         init:function(conf){
-            obj.port=conf.port;
-            obj.isdev=conf.isdev;
+            _obj.port=conf.port;
+            _obj.isdev=conf.isdev;
             
         },
         start:function(){

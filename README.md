@@ -45,7 +45,7 @@ tau.start();
 
 3) To run Taurus through Grunt you would need a <a href="http://gruntjs.com/getting-started">grunt install</a>.
 <pre>
-$grunt start
+$grunt start (start-dev for dev env)
 </pre>
 
 4) Before running Taurus unit test, you also need <a href="https://www.npmjs.com/package/istanbul">to install istanbul</a> and <a href="http://mochajs.org/"> to install mocha</a>.

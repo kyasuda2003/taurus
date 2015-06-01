@@ -9,12 +9,20 @@ module.exports = function (grunt) {
         pkg: grunt.file.readJSON('package.json')
     });
     
+    grunt.registerTask('start-dev', 'Start the Taurus', function() {
+        
+        var _tau=require('./index');
+
+        _tau.init({port:3131,isdev:true});
+        _tau.start();
+    });
+    
     grunt.registerTask('start', 'Start the Taurus', function() {
         
-        var _chat=require('./index');
+        var _tau=require('./index');
 
-        _chat.init();
-        _chat.start();
+        _tau.init({port:3131,isdev:false});
+        _tau.start();
     });
     
     grunt.registerTask('test', 'Start the AAE Plugin', function() {
