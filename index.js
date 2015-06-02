@@ -31,7 +31,7 @@ var _express=require('express'),
             if (_res.hasOwnProperty(key)) {
                 var pr=_res[key];
                 if (key!=senderId){
-                    pr.end({callbackType:msgtype,callbackInfo:msgval});
+                    pr.end(JSON.stringify({callbackType:msgtype,callbackInfo:msgval}));
                 }
             }
         }
@@ -48,7 +48,9 @@ var _express=require('express'),
             var userId=req.body.userId,
                 timeout=req.body.timeout;
     
-            timeout&&(timeout==60000);  
+            if (typeof timeout=='undefined')
+                timeout=60000;  
+            
             res.setTimeout(timeout, function(){
                 return res.end(JSON.stringify({callbackType:'AppStatus',
                                         callbackInfo:{status:'Connection expired in millisec:'+timeout}}));
@@ -60,13 +62,15 @@ var _express=require('express'),
         connect: function(req,res, next){
             /*
              * request body
-             * {userName:<username>}
+             * {userName:<userName>}
              * response
-             * {status:<status>,userId:<userId>,user:{userName:<username>,status:<enum>}}
+             * {status:<status>,userId:<userId>,user:{userName:<userName>,status:<enum>}}
              */
+            
             var userId=_helper.getUUID(),body=req.body,
                 rosterObj={};
         
+            
             _roster[userId]={userName:body.userName,status:_status.online};
             
             rosterObj=_helper.objCopy(_roster[userId]);
@@ -136,11 +140,11 @@ var _express=require('express'),
                 rosterObj.status=_status.joined;
                 _msgproc(userId,'presenceStatus',rosterObj);
             
-                return res.end(JSON.stringify({status:'User joined the room:'+roomName,
+                return res.end(JSON.stringify({status:'User joined the room: '+roomObj.roomName,
                                                room:roomObj}));
             }
 
-            return res.end(JSON.stringify({status:'User failed joining the room:'+roomName}));
+            return res.end(JSON.stringify({status:'User failed joining the room: '+roomObj.roomName}));
         },
         leaveroom:function(req,res,next){
 
@@ -183,9 +187,9 @@ var _express=require('express'),
                 userName=req.body.userName,
                 _ref=true;
 
-            //console.log(_roster[_ref1]+', cid:'+_ref1);
+            console.log('User request (userId:'+userId+') '+JSON.stringify(_roster[userId]));
             
-            if ((typeof _roster[userId]=='undefined')||(_roster[userId]&&_roster[userId].UserName!=userName))
+            if ((typeof _roster[userId]=='undefined')||(_roster[userId]&&_roster[userId].userName!=userName))
                 _ref=false;
 
             if (_ref==false){
@@ -208,7 +212,8 @@ var _express=require('express'),
             _route.post('/callbacks',_api.validate,_api.callbacks);
             _route.post('/joinroom',_api.validate,_api.joinroom);
             _route.post('/leaveroom',_api.validate,_api.leaveroom);
-
+            
+            _exp.disable('x-powered-by');
             _exp.use(_bodyParser.json(),
                      _bodyParser.urlencoded({ extended: true }),
                      _route);
