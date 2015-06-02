@@ -25,7 +25,7 @@ npm install taurus --save-dev
 taurus is default to port#3131.
 
 <h3>Usage</h3>
-Adding taurus in client application:
+Adding taurus in your client application:
 <pre>
 var tau=required('taurus');
 </pre>
