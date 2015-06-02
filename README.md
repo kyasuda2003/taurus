@@ -17,7 +17,7 @@ curl http://localhost:3131/<file_name>
 
 <h3>Installation:</h3>
 
-taurus recommend to install package through --save-dev.
+taurus recommends installing package through --save-dev.
 <pre>
 npm install taurus --save-dev
 </pre>
