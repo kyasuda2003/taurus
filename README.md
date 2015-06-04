@@ -5,7 +5,7 @@ taurus
 
 taurus chat embraces Node JS's spirit of scalablity, lightweight, and security. taurus realises how imperative of #<b>long-poll</b> http request is when #<b>websocket</b> is a no-go in a complex production environment.
 
-taurus supports both #<b>Long-poll</b> #<b>Websocket</b> connection.
+Not like any other online chat systems, taurus independently operates on its own core (no expressjs, no socket.io) and supports both #<b>Long-poll</b> #<b>Websocket</b> connection.
 
 taurus loves charity works and is ready to be commissioned in any non-profit communities.
 
