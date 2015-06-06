@@ -6,7 +6,7 @@
 ;(function(){
 
     var _helper=require('./lib/tau.helper'),
-        _route=require('./lib/tau.http');
+        _route=require('taurus-express-light');
         _path=require('path'),
         _fs=require('fs'),
         _vpath=__dirname,
@@ -55,9 +55,6 @@
                                             callbackInfo:{status:'Connection expired in millisec:'+timeout}}));
                 });
 
-                setTimeout(function(){
-                    res.write('3 secs left..');
-                },3000);
                 _res[userId]=res;
 
             },
@@ -143,12 +140,17 @@
                     roomObj.users.splice(0,0,userId);
                     rosterObj=_helper.objCopy(_roster[userId]);
                     rosterObj.status=_status.joined;
+                    rosterObj.roomId=roomId;
                     _msgproc(userId,'presenceStatus',rosterObj);
-
+                    
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                
                     return res.end(JSON.stringify({status:'User joined the room: '+roomObj.roomName,
                                                    room:roomObj}));
                 }
 
+                res.writeHead(501, { "Content-Type": "application/json" });
+                
                 return res.end(JSON.stringify({status:'User failed joining the room: '+roomObj.roomName}));
             },
             leaveroom:function(req,res,next){
@@ -171,13 +173,39 @@
                     _rooms[roomId].users.splice(pos,1);
                     rosterObj=_helper.objCopy(_roster[userId]);
                     rosterObj.status=_status.left;
+                    rosterObj.roomId=roomId;
                     _msgproc(userId,'presenceStatus',rosterObj);
-
+                    
+                    res.writeHead(200, { "Content-Type": "application/json" });
+                
                     return res.end(JSON.stringify({status:'User left the room:'+_rooms[roomId].roomName}));
                 }
-
+                
+                res.writeHead(501, { "Content-Type": "application/json" });
+                
                 return res.end(JSON.stringify({status:'Room invalid.'}));
 
+            },
+            sendMsg:function(req,res, next){
+                /*
+                 * request body
+                 * {userId:<userId>,userName:<userName>,roomId:<roomId>,msg:<msg>}
+                 * response
+                 * {status:<status>}
+                 */
+                var body=req.body,
+                    userId=body.userId,
+                    roomId=body.roomId;
+            
+                if (typeof _rooms[roomId]=='undefined'){
+                    res.writeHead(501, { "Content-Type": "application/json" });
+                    
+                    return res.end(JSON.stringify({status:'Room invalid.'}));
+                }
+                if (_rooms[roomId].users.indexOf(userId)<0){
+                    
+                }
+                 
             },
             validate:function(req,res,next){
 
@@ -194,6 +222,7 @@
 
                 console.log('User request (userId:'+userId+') '+JSON.stringify(_roster[userId]));
 
+                    
                 if ((typeof _roster[userId]=='undefined')||(_roster[userId]&&_roster[userId].userName!=userName))
                     _ref=false;
 
