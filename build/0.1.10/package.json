@@ -1,6 +1,6 @@
 {
   "name": "taurus",
-  "version": "0.1.14",
+  "version": "0.1.10",
   "description": "A Long-poll based chat service.",
   "author": "Keisuke Yasuda <kyasuda2003@gmail.com>",
   "contributors": [
@@ -41,11 +41,8 @@
     "node",
     "service"
   ],
-  "dependencies": {
-    "taurus-express-light":"^0.1.0"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "cli": "^0.8.0",
     "grunt": "^0.4.5"
   },
   "preferGlobal": false,
@@ -55,5 +52,5 @@
   "engines": {
     "node": "^0.10.28"
   },
-  "license": "MIT"
+  "license": "BSD-3-Clause"
 }
