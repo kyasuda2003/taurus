@@ -11,9 +11,9 @@ module.exports = function (grunt) {
     
     grunt.registerTask('start-dev', 'Start the Taurus', function() {
         
-        var _tau=require('./index');
+	    var _tau=require('./index'),ncb=this.async();
 
-        _tau.init({port:3131,isdev:true});
+        _tau.init({port:3131,isdev:true},require('./../tau-express-light/index'));
         _tau.start();
     });
     

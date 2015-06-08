@@ -12,9 +12,9 @@
         _vpath=__dirname,
         _currentPath=_path.resolve('./'),
         _pkg = require('./package.json'),     
-        _obj={port:3131,isdev:false},
+        _obj={port:3131,isdev:false, maxUsers:100,maxRooms:500},
         _status={online:1,offline:2,away:3,left:4,joined:5},
-        _roster={},_rooms={},_res={},
+	    _roster={},_rooms={},_res={},_msg={},
         _removeUserInRooms=function(userId){
              for (key in _rooms){
                 if (_rooms.hasOwnProperty(key)){
@@ -30,11 +30,28 @@
                 if (_res.hasOwnProperty(key)) {
                     var pr=_res[key];
                     if (key!=senderId){
-                        pr.end(JSON.stringify({callbackType:msgtype,callbackInfo:msgval}));
+
+			switch (msgtype){
+			    case 'presenceStatus':
+				pr.end(JSON.stringify({callbackType:msgtype,callbackInfo:msgval}));
+				break;
+			    case 'presenceMessage':
+				var roomObj=_rooms[msgval.roomId];
+				if (roomObj.users.indexOf(key)>-1){
+				    pr.end(JSON.stringify({callbackType:msgtype,callbackInfo:msgval}));
+				}
+				break;
+			    default:
+				break;
+			}
+
                     }
                 }
             }
-        },  
+        },
+	_cleanup=function(){
+	    
+	},
         _api={
             callbacks: function(req, res, next){
                 /*
@@ -71,14 +88,20 @@
                 var userId=_helper.getUUID(),body=req.body,
                     rosterObj={};
 
+		if (_helper.getCount(_roster)>_obj.maxUsers){
+		    res.writeHead(501, "No mapping", {'Content-Type': 'application/json'});
+		    return res.end(JSON.stringify({status:'Max roster is reached..'}));
+                   
+		}
 
-                _roster[userId]={userName:body.userName,status:_status.online};
+                _roster[userId]={userName:body.userName,status:_status.online,timeStamp:Date.now()};
 
                 rosterObj=_helper.objCopy(_roster[userId]);
                 rosterObj.status=_status.online;
                 _msgproc(userId,'presenceStatus',rosterObj);
-                console.log('connect');
                 
+		console.log('User request (userId:'+userId+') '+JSON.stringify(_roster[userId]));
+
                 return res.end(JSON.stringify({status:'User '+rosterObj.userName+' has logged-in tau.',userId:userId,user:rosterObj}));
 
             },
@@ -118,7 +141,14 @@
                     roomId=body.roomId,roomName=body.roomName,
                     roomObj={},rosterObj={};
 
-                if (typeof roomId=='undefined'){
+		
+		if (_helper.getCount(_rooms)>_obj.maxRooms){
+		    res.writeHead(501, "No mapping", {'Content-Type': 'application/json'});
+		    return res.end(JSON.stringify({status:'Max number of rooms is reached..'}));
+                   
+		}
+
+		if (typeof roomId=='undefined'){
                     roomId=_helper.getUUID();
                 }
                 else {
@@ -132,7 +162,7 @@
 
                 if (typeof roomObj=='undefined'){
                     roomObj=(_rooms[roomId]=
-                                {roomId:roomId,roomName:roomName,users:[]});
+			{roomId:roomId,roomName:roomName,users:[],timeStamp:Date.now()});
                 }
 
                 if (roomObj.users.indexOf(userId)<0){
@@ -186,7 +216,7 @@
                 return res.end(JSON.stringify({status:'Room invalid.'}));
 
             },
-            sendMsg:function(req,res, next){
+            send:function(req,res, next){
                 /*
                  * request body
                  * {userId:<userId>,userName:<userName>,roomId:<roomId>,msg:<msg>}
@@ -195,17 +225,34 @@
                  */
                 var body=req.body,
                     userId=body.userId,
-                    roomId=body.roomId;
+		    roomId=body.roomId,
+		    uuid=_helper.getUUID();
             
+		//validate the room
                 if (typeof _rooms[roomId]=='undefined'){
                     res.writeHead(501, { "Content-Type": "application/json" });
                     
                     return res.end(JSON.stringify({status:'Room invalid.'}));
                 }
+
+		//is the user in the room?
                 if (_rooms[roomId].users.indexOf(userId)<0){
-                    
+		    res.writeHead(501, { "Content-Type": "application/json" });
+			
+                    return res.end(JSON.stringify({status:'Room invalid.'}));
+                
                 }
-                 
+
+		_msg[uuid]={userId: userId, roomId: roomId, msg:body.msg, timeStamp:Date.now()};
+		console.log(JSON.stringify(_msg[uuid]));
+
+		//broadcast the message
+		_msgproc(userId,'presenceMessage',{msg: new Buffer(_msg[uuid].msg).toString('base64'),timeStamp:_msg[uuid].timeStamp,userId:userId, roomId:roomId});
+		
+		res.writeHead(200, { "Content-Type": "application/json" });
+                
+		return res.end(JSON.stringify({status:'Message has been sent: '+body.msg}));
+                    
             },
             validate:function(req,res,next){
 
@@ -236,9 +283,13 @@
         };
 
     module.exports={
-        init:function(conf){
+        init:function(conf,route){
             _obj.port=conf.port;
             _obj.isdev=conf.isdev;
+
+	    if (_obj.isdev){
+		_route=route;
+	    }
 
         },
         start:function(){
@@ -248,7 +299,8 @@
             _route.post('/callbacks',_api.validate,_api.callbacks);
             _route.post('/joinroom',_api.validate,_api.joinroom);
             _route.post('/leaveroom',_api.validate,_api.leaveroom);
-            
+            _route.post('/send',_api.validate,_api.send);
+	    
             _route.listen(_obj.port);
 
             
