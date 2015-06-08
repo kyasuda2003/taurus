@@ -12,35 +12,17 @@
         _vpath=__dirname,
         _currentPath=_path.resolve('./'),
         _pkg = require('./package.json'),     
-        _obj={port:3131,isdev:false, maxUsers:100,maxRooms:300, maxMsgs:6000},
+        _obj={port:3131,isdev:false, maxUsers:100,maxRooms:500},
         _status={online:1,offline:2,away:3,left:4,joined:5},
-	_roster={},_rooms={},_res={},_msgs={},
-	_rostercnt=0,_roomcnt=0,_msgcnt=0,
-	_removeMsgByRoomId=function(roomId){
-	    for (var key in _msgs){
-		if (_msgs.hasOwnProperty(key)){
-		    if (_msgs[key].roomId==roomId){
-		        delete _msgs[key];
-			_msgcnt--;
-		    }
-		}
-	    }
-	},
+	    _roster={},_rooms={},_res={},_msg={},
         _removeUserInRooms=function(userId){
-            for (var key in _rooms){
+             for (key in _rooms){
                 if (_rooms.hasOwnProperty(key)){
                     var pos=_rooms[key].users.indexOf(userId);
-                    if (pos>-1){
+                    if (pos>-1)
                         _rooms[key].users.splice(pos,1);
-			
-			if (_rooms[key].users==0){
-			    _removeMsgByRoomId(key);
-			    delete _rooms[key];
-			    _roomcnt--;
-			}
-		    }
                 }
-            }
+             }
         },
         _msgproc=function(senderId,msgtype,msgval){
 
@@ -67,6 +49,9 @@
                 }
             }
         },
+	_cleanup=function(){
+	    
+	},
         _api={
             callbacks: function(req, res, next){
                 /*
@@ -90,7 +75,7 @@
                 _res[userId]=res;
 
             },
-	    connect: function(req,res, next){
+            connect: function(req,res, next){
                 /*
                  * request body
                  * {userName:<userName>}
@@ -98,17 +83,18 @@
                  * {status:<status>,userId:<userId>,user:{userName:<userName>,status:<enum>}}
                  */
                 
+                //return res.end();
+                
                 var userId=_helper.getUUID(),body=req.body,
                     rosterObj={};
 
-		if (_rostercnt>_obj.maxUsers){
+		if (_helper.getCount(_roster)>_obj.maxUsers){
 		    res.writeHead(501, "No mapping", {'Content-Type': 'application/json'});
 		    return res.end(JSON.stringify({status:'Max roster is reached..'}));
                    
 		}
 
                 _roster[userId]={userName:body.userName,status:_status.online,timeStamp:Date.now()};
-		_rostercnt++;
 
                 rosterObj=_helper.objCopy(_roster[userId]);
                 rosterObj.status=_status.online;
@@ -129,19 +115,12 @@
 
                 var userId=req.body.userId,rosterObj=_helper.objCopy(_roster[userId]);
 
-                if (typeof _roster[userId]!='undefined'){
+                delete _res[userId];
 
-		    delete _res[userId];
+                delete _roster[userId];
 
-                    delete _roster[userId];
-		    
-		    _rostercnt--;
-		    
-		    _removeUserInRooms(userId);
+                _removeUserInRooms(userId);
 
-		}		
-		
-                
                 rosterObj.status=_status.offline;
 
                 _msgproc(userId,'presenceStatus',rosterObj);
@@ -163,7 +142,7 @@
                     roomObj={},rosterObj={};
 
 		
-		if (_roomcnt>_obj.maxRooms){
+		if (_helper.getCount(_rooms)>_obj.maxRooms){
 		    res.writeHead(501, "No mapping", {'Content-Type': 'application/json'});
 		    return res.end(JSON.stringify({status:'Max number of rooms is reached..'}));
                    
@@ -184,8 +163,6 @@
                 if (typeof roomObj=='undefined'){
                     roomObj=(_rooms[roomId]=
 			{roomId:roomId,roomName:roomName,users:[],timeStamp:Date.now()});
-
-		    _roomcnt++;
                 }
 
                 if (roomObj.users.indexOf(userId)<0){
@@ -219,19 +196,11 @@
                     userId=body.userId,
                     roomId=body.roomId,
                     rosterObj={},
-		    roomName,
                     pos=_rooms[roomId].users.indexOf(userId);
 
                 if (pos>-1){
                     _roster[userId].status=_status.online;
                     _rooms[roomId].users.splice(pos,1);
-		    roomName=_rooms[roomId].roomName;
-
-		    if (_rooms[roomId].users.length<1){
-			delete _rooms[roomId];
-			_roomcnt--;
-		    }
-
                     rosterObj=_helper.objCopy(_roster[userId]);
                     rosterObj.status=_status.left;
                     rosterObj.roomId=roomId;
@@ -239,7 +208,7 @@
                     
                     res.writeHead(200, { "Content-Type": "application/json" });
                 
-                    return res.end(JSON.stringify({status:'User left the room:'+roomName}));
+                    return res.end(JSON.stringify({status:'User left the room:'+_rooms[roomId].roomName}));
                 }
                 
                 res.writeHead(501, { "Content-Type": "application/json" });
@@ -259,12 +228,6 @@
 		    roomId=body.roomId,
 		    uuid=_helper.getUUID();
             
-		if (_msgcnt>_obj.maxMsgs){
-		    res.writeHead(501, { "Content-Type": "application/json" });
-                    
-                    return res.end(JSON.stringify({status:'Max number of messages is reached.'}));
-		}
-
 		//validate the room
                 if (typeof _rooms[roomId]=='undefined'){
                     res.writeHead(501, { "Content-Type": "application/json" });
@@ -280,11 +243,11 @@
                 
                 }
 
-		_msgs[uuid]={userId: userId, roomId: roomId, msg:body.msg, timeStamp:Date.now()};
-		console.log(JSON.stringify(_msgs[uuid]));
+		_msg[uuid]={userId: userId, roomId: roomId, msg:body.msg, timeStamp:Date.now()};
+		console.log(JSON.stringify(_msg[uuid]));
 
 		//broadcast the message
-		_msgproc(userId,'presenceMessage',{msg: new Buffer(_msgs[uuid].msg).toString('base64'),timeStamp:_msgs[uuid].timeStamp,userId:userId, roomId:roomId});
+		_msgproc(userId,'presenceMessage',{msg: new Buffer(_msg[uuid].msg).toString('base64'),timeStamp:_msg[uuid].timeStamp,userId:userId, roomId:roomId});
 		
 		res.writeHead(200, { "Content-Type": "application/json" });
                 
@@ -357,16 +320,7 @@
             });
             
         },
-        shutdown:function(){},
-	getRooms:function(){
-	    return _rooms;
-	},
-	getRoster:function(){
-	    return _roster;
-	},
-	getMessages:function(){
-	    return _msgs;
-	},
+        shutdown:function(){}
     };
 })();
     
